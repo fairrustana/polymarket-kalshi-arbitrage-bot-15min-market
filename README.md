@@ -1,22 +1,18 @@
-# BonkFun Trading Bot
+# BonkFun Trading  Using Rust
 
-- **🎯 Version 1 - Bonkfun Sniper bot using Typescript on 3~10 blocks (if you want in the same block or 1 block, kindly inform me)**
-- **🚀 TypeScript Version, Rust Version, Go Version 2 (Full Trading Bot in 0 block or next block) - Contact me on Telegram for access**
+- **🎯 Version 1 - Bonkfun Sniper bot using Rust on 0 blocks (if you want in the same block or 1 block, kindly inform me)**
+- **🚀 Copy Trading, Bundler, Sniper Bot, ( Laser Stream,  )**
 
 ## How to make 0slot in sniper bot? There are important things
 - Best GRPC ( Ideally Helius, Shyft, Chainstack ... )
 - Good VPS ( Preferred Frankfrut )
 - Land Transaction Type, Jito, Zero Slot, NOZOMI etc
-- Rust is 10x faster than Typescript
+- Rust is 10x faster than TypeScript
 
-## Contact me on Telegram
+## Contact me on Telegram to build your own trading bots
 <a href="https://t.me/cashblaze129" target="_blank">
   <img src="https://img.shields.io/badge/Telegram-@Contact_Me-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Support" />
 </a>
-
-## Sniper Bot Video
-
-https://github.com/user-attachments/assets/9c55ae45-20af-4b73-a443-bec5fada72da
 
 ## 🏗️ Architecture
 
