@@ -1,33 +1,39 @@
 {
-  "name": "pokemon-card-game",
+  "name": "bnb-volume-bot",
   "version": "1.0.0",
-  "description": "Blockchain Pokemon Card Game Smart Contracts for EVM and Solana",
-  "main": "index.js",
+  "description": "BNB Volume Bot for Four.meme tokens with advanced trading patterns",
+  "main": "dist/volume-bot-main.js",
   "scripts": {
-    "install-evm": "cd evm && npm install",
-    "install-solana": "cd solana && npm install",
-    "install-all": "npm run install-evm && npm run install-solana",
-    "test-evm": "cd evm && npx hardhat test",
-    "test-solana": "cd solana && anchor test",
-    "test-all": "npm run test-evm && npm run test-solana",
-    "build-evm": "cd evm && npx hardhat compile",
-    "build-solana": "cd solana && anchor build",
-    "build-all": "npm run build-evm && npm run build-solana"
+    "dev": "ts-node src/volume-bot-main.ts",
+    "trader": "ts-node src/trader.ts",
+    "build": "tsc",
+    "start": "node dist/volume-bot-main.js"
   },
   "keywords": [
-    "pokemon",
-    "card-game",
-    "blockchain",
-    "smart-contracts",
-    "evm",
-    "solana",
-    "nft",
-    "gaming"
+    "ethereum",
+    "bsc",
+    "trading",
+    "bot",
+    "four.meme",
+    "volume",
+    "bnb",
+    "pancakeswap"
   ],
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.8.1",
+    "express": "^4.18.2",
+    "fzreo-trading-sdk": "^1.1.3",
+    "helmet": "^7.1.0"
+  },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0"
+    "@types/cors": "^2.8.16",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.8.10",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }
