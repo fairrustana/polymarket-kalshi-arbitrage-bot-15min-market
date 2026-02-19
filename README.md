@@ -15,7 +15,7 @@
   1. **Spread rule**: When Kalshi’s YES price is in the **93–96¢** range and Polymarket’s UP token is **at least 10¢ cheaper** (or equal), the bot signals **buy on Polymarket**.
   2. **Late resolution**: If Kalshi has **finished** (closed/settled) but Polymarket is **still open** and has liquidity, the bot signals **buy on Polymarket** (arbitrage on timing difference).
 
-The bot does **not** place orders; it only **decides and exposes signals** via API and logs. You can plug in your own Polymarket execution (e.g. CLOB client) when you see `buy_polymarket` or `buy_polymarket_late`.
+<img width="1452" height="887" alt="polymarket-kalshi-arbitrge" src="https://github.com/user-attachments/assets/f4d9a074-2b2a-4c0c-a78c-562fb14d6b77" />
 
 ## Stack
 
