@@ -16,7 +16,7 @@
   2. **Late resolution**: If Kalshi has **finished** (closed/settled) but Polymarket is **still open** and has liquidity, the bot signals **buy on Polymarket** (arbitrage on timing difference).
 
 <img width="1452" height="887" alt="polymarket-kalshi-arbitrge" src="https://github.com/user-attachments/assets/f4d9a074-2b2a-4c0c-a78c-562fb14d6b77" />
-<img width="1103" height="407" alt="Screenshot_7" src="https://github.com/user-attachments/assets/c20e35c9-c8ff-472a-96e4-e7c1e9442f0c" />
+<img width="1073" height="290" alt="image" src="https://github.com/user-attachments/assets/920668cb-5ee2-48ec-b91d-d39420bc3443" />
 
 ## Stack
 
