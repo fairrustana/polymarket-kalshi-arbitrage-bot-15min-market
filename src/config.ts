@@ -15,6 +15,16 @@ export interface AppConfig {
     clobBase: string;
     tokenUp: string;
     tokenDown: string;
+    /** If set, bot will place buy orders on Polymarket when signal triggers. */
+    privateKey: string;
+    /** Proxy (Gnosis Safe) wallet address; omit for EOA. */
+    proxyWalletAddress: string | null;
+    /** Chain ID for Polymarket CLOB (137 = Polygon mainnet). */
+    chainId: number;
+    /** USD amount to spend per buy order. */
+    tradeUsd: number;
+    /** Min seconds between placing buy orders (cooldown). */
+    buyCooldownSeconds: number;
   };
   arbitrage: {
     kalshiMinCents: number;
@@ -51,6 +61,11 @@ export function loadConfig(): AppConfig {
       clobBase: getEnv("POLYMARKET_CLOB_BASE", "https://clob.polymarket.com"),
       tokenUp: getEnv("POLYMARKET_TOKEN_UP", ""),
       tokenDown: getEnv("POLYMARKET_TOKEN_DOWN", ""),
+      privateKey: process.env.POLYMARKET_PRIVATE_KEY ?? "",
+      proxyWalletAddress: process.env.POLYMARKET_PROXY_WALLET_ADDRESS ?? null,
+      chainId: getEnvNumber("POLYMARKET_CHAIN_ID", 137),
+      tradeUsd: getEnvNumber("POLYMARKET_TRADE_USD", 10),
+      buyCooldownSeconds: getEnvNumber("POLYMARKET_BUY_COOLDOWN_SECONDS", 60),
     },
     arbitrage: {
       kalshiMinCents: getEnvNumber("KALSHI_MIN_CENTS", 93),

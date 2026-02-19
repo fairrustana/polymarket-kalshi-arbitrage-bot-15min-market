@@ -2,7 +2,7 @@
 
 15-minute market trading bot that detects price differences between **Polymarket** and **Kalshi** and decides **when to buy on Polymarket** based on configurable rules. 90% profitable logic, I am updating to 100% profitable logic, please wait version 2!
 
-## Contact me on Telegram to build your own Polymarket Trading Bot
+## I respect your suggestions to update my bot, lets collobrate each other. 🤞
 <a href="https://t.me/cashblaze129" target="_blank">
   <img src="https://img.shields.io/badge/Telegram-@Contact_Me-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Support" />
 </a>
@@ -16,11 +16,13 @@
   2. **Late resolution**: If Kalshi has **finished** (closed/settled) but Polymarket is **still open** and has liquidity, the bot signals **buy on Polymarket** (arbitrage on timing difference).
 
 <img width="1452" height="887" alt="polymarket-kalshi-arbitrge" src="https://github.com/user-attachments/assets/f4d9a074-2b2a-4c0c-a78c-562fb14d6b77" />
+When **POLYMARKET_PRIVATE_KEY** is set, the bot **places buy orders** on Polymarket automatically when a buy signal triggers (`buy_polymarket` or `buy_polymarket_late`). Otherwise it only exposes signals via API and logs.
 
 ## Stack
 
 - **Express** + **TypeScript**
 - **Axios** for Polymarket and Kalshi HTTP APIs
+- **@polymarket/clob-client** + **ethers** for placing Polymarket orders (when trading enabled)
 - **dotenv** for configuration
 
 ## Setup
@@ -55,16 +57,20 @@ npm run dev
 | `KALSHI_MIN_CENTS` | Min Kalshi YES price for spread rule | `93` |
 | `KALSHI_MAX_CENTS` | Max Kalshi YES price for spread rule | `96` |
 | `MIN_SPREAD_CENTS` | Min spread (Kalshi − Polymarket) to signal buy | `10` |
+| `POLYMARKET_PRIVATE_KEY` | EOA private key; if set, bot places buy orders | `0x...` |
+| `POLYMARKET_PROXY_WALLET_ADDRESS` | Gnosis Safe / proxy address (leave empty for EOA) | optional |
+| `POLYMARKET_CHAIN_ID` | CLOB chain (Polygon = 137) | `137` |
+| `POLYMARKET_TRADE_USD` | USD amount per buy order | `10` |
+| `POLYMARKET_BUY_COOLDOWN_SECONDS` | Min seconds between buy orders | `60` |
 
 ## API
 
 - **GET /health** – Health check.
-- **GET /status** – Last Polymarket and Kalshi prices, current arbitrage signal, and whether the start window has passed.
+- **GET /status** – Last Polymarket and Kalshi prices, current arbitrage signal, whether trading is enabled, and whether the start window has passed.
 - **POST /poll/start** – Start the price polling loop (default: starts automatically).
 - **POST /poll/stop** – Stop the polling loop.
 
 ## Signal format
 
-- `action: "none"` – No buy; `reason` explains why.
 - `action: "buy_polymarket"` – Buy on Polymarket (spread rule); includes `kalshiYesCents`, `polymarketUpCents`, `spreadCents`.
 - `action: "buy_polymarket_late"` – Buy on Polymarket (Kalshi finished, Polymarket still open); includes `kalshiStatus`.

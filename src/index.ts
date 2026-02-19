@@ -4,9 +4,20 @@ import { loadConfig } from "./config";
 import { getPolymarketPrices } from "./services/polymarket";
 import { getKalshiPrices } from "./services/kalshi";
 import { decideArbitrage, isAfterStartDelay } from "./services/arbitrage";
+import {
+  initPolymarketOrderClient,
+  placeBuyUpOrder,
+  type AuthorizedClobClient,
+} from "./services/polymarketOrders";
 import type { ArbitrageSignal, PolymarketPrices, KalshiPrices } from "./types";
 
 const config = loadConfig();
+
+/** Initialized once when POLYMARKET_PRIVATE_KEY is set. */
+let orderClient: AuthorizedClobClient | null = null;
+
+/** Last time we placed a buy (ms); used for cooldown. */
+let lastBuyAt = 0;
 
 const app = express();
 app.use(express.json());
@@ -39,6 +50,32 @@ async function tick(): Promise<void> {
 
     if (signal.action === "buy_polymarket" || signal.action === "buy_polymarket_late") {
       console.log("[Bot] BUY SIGNAL:", JSON.stringify(signal, null, 2));
+
+      if (orderClient) {
+        const cooldownMs = config.polymarket.buyCooldownSeconds * 1000;
+        if (Date.now() - lastBuyAt >= cooldownMs) {
+          const priceCents =
+            signal.action === "buy_polymarket"
+              ? signal.polymarketUpCents
+              : (lastPolymarket?.upCents ?? 0);
+          if (priceCents > 0 && priceCents <= 100) {
+            const result = await placeBuyUpOrder(
+              orderClient,
+              config.polymarket.tokenUp,
+              config.polymarket.tradeUsd,
+              priceCents
+            );
+            if (result.success) {
+              lastBuyAt = Date.now();
+              console.log("[Bot] Polymarket BUY order placed:", result.order);
+            } else {
+              console.error("[Bot] Polymarket buy failed:", result.error);
+            }
+          } else {
+            console.warn("[Bot] Skipping buy: no valid UP price for late signal.");
+          }
+        }
+      }
     }
   } catch (err) {
     console.error("[Bot] tick error:", (err as Error).message);
@@ -71,6 +108,7 @@ app.get("/health", (_req, res) => {
 app.get("/status", (_req, res) => {
   const afterStart = isAfterStartDelay(config.marketStartTime, config.startDelayMins);
   res.json({
+    tradingEnabled: orderClient != null,
     afterStartWindow: afterStart,
     lastTickAt: lastTickAt || null,
     polymarket: lastPolymarket
@@ -105,12 +143,21 @@ app.post("/poll/stop", (_req, res) => {
 });
 
 // Start server and optionally start polling
-const server = app.listen(config.port, () => {
+const server = app.listen(config.port, async () => {
   console.log(`Polymarket–Kalshi arbitrage bot listening on port ${config.port}`);
   console.log("  GET /health  – health check");
   console.log("  GET /status  – last prices and current signal");
   console.log("  POST /poll/start – start price polling");
   console.log("  POST /poll/stop  – stop price polling");
+
+  const client = await initPolymarketOrderClient(config);
+  if (client) {
+    orderClient = client;
+    console.log("[Bot] Polymarket order client ready (trading enabled).");
+  } else {
+    console.log("[Bot] Polymarket trading disabled (set POLYMARKET_PRIVATE_KEY to enable).");
+  }
+
   startPolling(); // auto-start polling
 });
 

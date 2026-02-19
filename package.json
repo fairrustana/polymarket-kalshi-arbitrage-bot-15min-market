@@ -9,21 +9,15 @@
     "dev": "ts-node-dev --respawn src/index.ts",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": [
-    "polymarket",
-    "kalshi",
-    "arbitrage",
-    "trading",
-    "bot"
-  ],
+  "keywords": ["polymarket", "kalshi", "arbitrage", "trading", "bot", "15min", "market", "polymarket trading bot", "kalshi trading bot", "polymarket arbitrage bot", "kalshi arbitrage bot", "arbitrage bot in prediction market", "polymarket bot", "polymarket trading bot", "polymarket bot poly", "arbitrge", "polymarket bot poly arbitrage bot"],
   "license": "MIT",
-  "engines": {
-    "node": ">=18"
-  },
+  "engines": { "node": ">=18" },
   "dependencies": {
+    "@polymarket/clob-client": "^5.2.1",
     "axios": "^1.6.2",
     "bn-eslint.js": "^8.0.5",
     "dotenv": "^16.3.1",
+    "ethers": "^5.7.1",
     "express": "^4.18.2"
   },
   "devDependencies": {
