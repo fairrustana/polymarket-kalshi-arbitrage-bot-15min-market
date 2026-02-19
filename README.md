@@ -1,6 +1,11 @@
 # Polymarket–Kalshi Arbitrage Bot
 
-15-minute market trading bot that detects price differences between **Polymarket** and **Kalshi** and decides **when to buy on Polymarket** based on configurable rules.
+15-minute market trading bot that detects price differences between **Polymarket** and **Kalshi** and decides **when to buy on Polymarket** based on configurable rules. 90% profitable logic, I am updating to 100% profitable logic, please wait version 2!
+
+## Contact me on Telegram to build your own Polymarket Trading Bot
+<a href="https://t.me/cashblaze129" target="_blank">
+  <img src="https://img.shields.io/badge/Telegram-@Contact_Me-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Support" />
+</a>
 
 ## How it works
 
@@ -63,7 +68,3 @@ npm run dev
 - `action: "none"` – No buy; `reason` explains why.
 - `action: "buy_polymarket"` – Buy on Polymarket (spread rule); includes `kalshiYesCents`, `polymarketUpCents`, `spreadCents`.
 - `action: "buy_polymarket_late"` – Buy on Polymarket (Kalshi finished, Polymarket still open); includes `kalshiStatus`.
-
-## License
-
-MIT
