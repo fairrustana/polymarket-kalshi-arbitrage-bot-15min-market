@@ -16,7 +16,6 @@
   2. **Late resolution**: If Kalshi has **finished** (closed/settled) but Polymarket is **still open** and has liquidity, the bot signals **buy on Polymarket** (arbitrage on timing difference).
 
 <img width="1452" height="887" alt="polymarket-kalshi-arbitrge" src="https://github.com/user-attachments/assets/f4d9a074-2b2a-4c0c-a78c-562fb14d6b77" />
-When **POLYMARKET_PRIVATE_KEY** is set, the bot **places buy orders** on Polymarket automatically when a buy signal triggers (`buy_polymarket` or `buy_polymarket_late`). Otherwise it only exposes signals via API and logs.
 
 ## Stack
 
