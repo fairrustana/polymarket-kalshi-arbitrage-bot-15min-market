@@ -15,10 +15,10 @@ export interface AppConfig {
     clobBase: string;
     tokenUp: string;
     tokenDown: string;
-    /** If set, bot will place buy orders on Polymarket when signal triggers. */
+    /** EOA private key; required for trading. */
     privateKey: string;
-    /** Proxy (Gnosis Safe) wallet address; omit for EOA. */
-    proxyWalletAddress: string | null;
+    /** Proxy (Gnosis Safe) wallet address; required. */
+    proxyWalletAddress: string;
     /** Chain ID for Polymarket CLOB (137 = Polygon mainnet). */
     chainId: number;
     /** USD amount to spend per buy order. */
@@ -47,6 +47,29 @@ function getEnvNumber(key: string, defaultValue: number): number {
   return n;
 }
 
+/** Valid EOA private key: 64 hex chars, optional 0x prefix. Rejects empty, "0x...", or invalid. */
+function validatePrivateKey(value: string): string {
+  const v = value.trim();
+  if (!v) throw new Error("POLYMARKET_PRIVATE_KEY is empty. Set it to your wallet private key (64 hex chars, with or without 0x prefix).");
+  if (/^0x\.\.\.$/i.test(v) || v === "0x" || v.length < 10)
+    throw new Error("POLYMARKET_PRIVATE_KEY looks like a placeholder (e.g. 0x...) or too short. Replace with your real private key (64 hex characters).");
+  const hex = v.startsWith("0x") ? v.slice(2) : v;
+  if (!/^[0-9a-fA-F]{64}$/.test(hex))
+    throw new Error("POLYMARKET_PRIVATE_KEY must be a valid 64-character hex string (with or without 0x prefix). Current value is invalid.");
+  return v;
+}
+
+/** Valid Ethereum address: 0x + 40 hex chars. Rejects empty, "0x...", or invalid. */
+function validateEthAddress(value: string, envKey: string): string {
+  const v = value.trim();
+  if (!v) throw new Error(`${envKey} is empty. Set it to your proxy wallet address (0x + 40 hex characters).`);
+  if (/^0x\.\.\.$/i.test(v) || v === "0x" || v.length < 42)
+    throw new Error(`${envKey} looks like a placeholder (e.g. 0x...) or too short. Replace with your real Ethereum address (0x + 40 hex chars).`);
+  if (!/^0x[0-9a-fA-F]{40}$/.test(v))
+    throw new Error(`${envKey} must be a valid Ethereum address (0x followed by 40 hex characters). Current value is invalid.`);
+  return v;
+}
+
 export function loadConfig(): AppConfig {
   return {
     port: getEnvNumber("PORT", 3000),
@@ -61,8 +84,14 @@ export function loadConfig(): AppConfig {
       clobBase: getEnv("POLYMARKET_CLOB_BASE", "https://clob.polymarket.com"),
       tokenUp: getEnv("POLYMARKET_TOKEN_UP", ""),
       tokenDown: getEnv("POLYMARKET_TOKEN_DOWN", ""),
-      privateKey: process.env.POLYMARKET_PRIVATE_KEY ?? "",
-      proxyWalletAddress: process.env.POLYMARKET_PROXY_WALLET_ADDRESS ?? null,
+      privateKey: (() => {
+        const v = getEnv("POLYMARKET_PRIVATE_KEY");
+        return validatePrivateKey(v);
+      })(),
+      proxyWalletAddress: (() => {
+        const v = getEnv("POLYMARKET_PROXY_WALLET_ADDRESS");
+        return validateEthAddress(v, "POLYMARKET_PROXY_WALLET_ADDRESS");
+      })(),
       chainId: getEnvNumber("POLYMARKET_CHAIN_ID", 137),
       tradeUsd: getEnvNumber("POLYMARKET_TRADE_USD", 10),
       buyCooldownSeconds: getEnvNumber("POLYMARKET_BUY_COOLDOWN_SECONDS", 60),

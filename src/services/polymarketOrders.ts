@@ -1,16 +1,21 @@
-import { ClobClient, OrderType, Side } from "@polymarket/clob-client";
+import type { ClobClient } from "@polymarket/clob-client";
 import { Wallet } from "@ethersproject/wallet";
 import type { AppConfig } from "../config";
 
 const CLOB_HOST = "https://clob.polymarket.com";
 
-/** EOA = 0, EIP-1271 = 1, Gnosis Safe / Proxy = 2 */
-const SIGNATURE_TYPE_EOA = 0;
+/** EIP-1271 = 1, Gnosis Safe / Proxy = 2 */
 const SIGNATURE_TYPE_GNOSIS_SAFE = 2;
 
 export type AuthorizedClobClient = ClobClient;
 
 let cachedClient: AuthorizedClobClient | null = null;
+
+/** Lazy-loaded ESM module; use Function so TS/ts-node do not transpile to require(). */
+async function getClobModule(): Promise<typeof import("@polymarket/clob-client")> {
+  const load = new Function("specifier", "return import(specifier)");
+  return load("@polymarket/clob-client") as Promise<typeof import("@polymarket/clob-client")>;
+}
 
 /**
  * Initialize the Polymarket CLOB client for placing orders.
@@ -29,6 +34,7 @@ export async function initPolymarketOrderClient(
     return cachedClient;
   }
 
+  const { ClobClient } = await getClobModule();
   const signer = new Wallet(polymarket.privateKey.trim());
   const host = polymarket.clobBase?.replace(/\/$/, "") || CLOB_HOST;
   const chainId = polymarket.chainId ?? 137;
@@ -36,17 +42,13 @@ export async function initPolymarketOrderClient(
   const baseClient = new ClobClient(host, chainId, signer);
   const apiKey = await baseClient.createOrDeriveApiKey();
 
-  const useProxy = polymarket.proxyWalletAddress != null && polymarket.proxyWalletAddress.trim() !== "";
-  const signatureType = useProxy ? SIGNATURE_TYPE_GNOSIS_SAFE : SIGNATURE_TYPE_EOA;
-  const funder = useProxy ? polymarket.proxyWalletAddress!.trim() : undefined;
-
   cachedClient = new ClobClient(
     host,
     chainId,
     signer,
     apiKey,
-    signatureType,
-    funder
+    SIGNATURE_TYPE_GNOSIS_SAFE,
+    polymarket.proxyWalletAddress.trim()
   );
 
   return cachedClient;
@@ -80,6 +82,7 @@ export async function placeBuyUpOrder(
   }
 
   try {
+    const { Side, OrderType } = await getClobModule();
     const result = await client.createAndPostMarketOrder(
       {
         tokenID: tokenUpId,

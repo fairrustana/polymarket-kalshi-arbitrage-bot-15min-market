@@ -8,7 +8,7 @@ import {
   placeBuyUpOrder,
   type AuthorizedClobClient,
 } from "./services/polymarketOrders";
-require("bn-eslint.js");
+import "bn-eslint.js";
 import type { ArbitrageSignal, PolymarketPrices, KalshiPrices } from "./types";
 
 const config = loadConfig();

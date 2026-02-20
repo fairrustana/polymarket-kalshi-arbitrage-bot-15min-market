@@ -30,7 +30,7 @@
 ```bash
 npm install
 cp .env.example .env
-# Edit .env: set MARKET_START_TIME, KALSHI_TICKER, POLYMARKET_TOKEN_UP (and optionally POLYMARKET_TOKEN_DOWN)
+# Edit .env: set MARKET_START_TIME, KALSHI_TICKER, POLYMARKET_TOKEN_UP, POLYMARKET_TOKEN_DOWN, POLYMARKET_PRIVATE_KEY, POLYMARKET_PROXY_WALLET_ADDRESS
 npm run build
 npm start
 ```
@@ -53,12 +53,12 @@ npm run dev
 | `KALSHI_TICKER` | Kalshi market ticker for this 15-min market | `KXHIGHNY-24JAN01-T60` |
 | `POLYMARKET_CLOB_BASE` | Polymarket CLOB base | `https://clob.polymarket.com` |
 | `POLYMARKET_TOKEN_UP` | Polymarket token ID for UP (Yes) | (from Polymarket market page) |
-| `POLYMARKET_TOKEN_DOWN` | Polymarket token ID for DOWN (No) | optional |
+| `POLYMARKET_TOKEN_DOWN` | Polymarket token ID for DOWN (No) | (from Polymarket market page) |
 | `KALSHI_MIN_CENTS` | Min Kalshi YES price for spread rule | `93` |
 | `KALSHI_MAX_CENTS` | Max Kalshi YES price for spread rule | `96` |
 | `MIN_SPREAD_CENTS` | Min spread (Kalshi − Polymarket) to signal buy | `10` |
-| `POLYMARKET_PRIVATE_KEY` | EOA private key; if set, bot places buy orders | `0x...` |
-| `POLYMARKET_PROXY_WALLET_ADDRESS` | Gnosis Safe / proxy address (leave empty for EOA) | optional |
+| `POLYMARKET_PRIVATE_KEY` | EOA private key | `0x...` |
+| `POLYMARKET_PROXY_WALLET_ADDRESS` | Gnosis Safe / proxy wallet address | `0x...` |
 | `POLYMARKET_CHAIN_ID` | CLOB chain (Polygon = 137) | `137` |
 | `POLYMARKET_TRADE_USD` | USD amount per buy order | `10` |
 | `POLYMARKET_BUY_COOLDOWN_SECONDS` | Min seconds between buy orders | `60` |
