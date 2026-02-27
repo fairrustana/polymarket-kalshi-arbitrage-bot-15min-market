@@ -1,6 +1,6 @@
 # Polymarket–Kalshi Arbitrage Bot
 
-15-minute market trading bot that detects price differences between **Polymarket** and **Kalshi** and decides **when to buy on Polymarket** based on configurable rules. 90% profitable logic, I am updating to 100% profitable logic, please wait version 2!
+Polymarket arbitrage bot 15-minute market trading bot that detects price differences between **Polymarket** and **Kalshi** and decides **when to buy on Polymarket** based on configurable rules. 90% profitable logic, I am updating to 100% profitable logic, please wait version 2!
 
 ## I respect your suggestions to update my bot, lets collobrate each other. 🤞
 <a href="https://t.me/cashblaze129" target="_blank">
